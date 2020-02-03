@@ -1,0 +1,2 @@
+SRR7103969_STAR_aligned_2ndPass_Aligned.sortedByCoord.out.bam	Group1	MOL1_2_EAE
+SRR7103974_STAR_aligned_2ndPass_Aligned.sortedByCoord.out.bam	Group1	MOL1_2_EAE
