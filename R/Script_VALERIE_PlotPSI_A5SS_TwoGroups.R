@@ -549,7 +549,7 @@ PlotPSI.A5SS.TwoGroups <- function(object, SampleInfo, ExonInfo, statistical.tes
             p3 <- as.grob(p3)
 
         # Arrange plots
-        plot.final <- ggarrange(p2, p3, p1, ncol=1, nrow=3, widths=0.25)
+        plot.final <- ggarrange(p3, p1, p2, ncol=1, nrow=3, widths=0.25)
 
         # Save plots
         ggsave(paste(Plots, "//", k, "_A5SS_Plots_", exon.info[k, "V3"], ".pdf", sep=""), plot.final, device="pdf", width=plot.width, height=plot.height)

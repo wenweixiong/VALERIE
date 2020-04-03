@@ -15,4 +15,4 @@ Suggests: knitr, rmarkdown
 VignetteBuilder: knitr
 ByteCompile: true
 NeedsCompilation: no
-Packaged: 2020-04-03 11:39:14 UTC; seanwenweixiong
+Packaged: 2020-04-03 12:00:06 UTC; seanwenweixiong
