@@ -18,3 +18,6 @@ library(VALERIE)
 
 # Tutorial
 A comprehensive tutorial for using VALERIE to visualise single-cell splicing events can be found here: https://wenweixiong.github.io/VALERIE
+
+# Publication
+We have published VALERIE in PLoS Computation Biology: https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008195
