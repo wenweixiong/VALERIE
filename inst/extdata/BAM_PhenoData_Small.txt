@@ -1,0 +1,7 @@
+bam.file.name	cell.type
+SRR7103997_STAR_aligned_2ndPass_Aligned.sortedByCoord.out.bam	EAE
+SRR7103996_STAR_aligned_2ndPass_Aligned.sortedByCoord.out.bam	EAE
+SRR7104007_STAR_aligned_2ndPass_Aligned.sortedByCoord.out.bam	EAE
+SRR7103107_STAR_aligned_2ndPass_Aligned.sortedByCoord.out.bam	Ctrl
+SRR7103235_STAR_aligned_2ndPass_Aligned.sortedByCoord.out.bam	Ctrl
+SRR7103236_STAR_aligned_2ndPass_Aligned.sortedByCoord.out.bam	Ctrl

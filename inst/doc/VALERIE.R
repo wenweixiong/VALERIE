@@ -1,4 +1,4 @@
-## ----wrap-hook, echo=FALSE-----------------------------------------------
+## ----wrap-hook, echo=FALSE----------------------------------------------------
 library(knitr)
 opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
 
@@ -8,45 +8,48 @@ knitr::knit_hooks$set(chunk = function(x, options) {
   ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
 })
 
-## ----setup, include = FALSE----------------------------------------------
+## ----setup, include = FALSE---------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 
-## ----eval=FALSE----------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
+#  # From Github
 #  library(devtools)
 #  install_github("wenweixiong/VALERIE")
+#  
+#  # From CRAN
+#  install.packages("VALERIE")
 
-## ----message=FALSE, warning=FALSE----------------------------------------
+## ----message=FALSE, warning=FALSE---------------------------------------------
 library(VALERIE)
 
-## ----message=FALSE, warning=FALSE, size="tiny"---------------------------
-# Exon file (General)
-exon.info <- read.table(system.file("extdata/Exon_Info", "Exon_Info_Further_Examples.txt", package="VALERIE"), sep="\t", header=FALSE, stringsAsFactors=FALSE)
-print(exon.info)
-
-# Exon file (Use for this example)
-exon.info <- read.table(system.file("extdata/Exon_Info", "Exon_Info.txt", package="VALERIE"), sep="\t", header=FALSE, stringsAsFactors=FALSE)
-print(exon.info)
-
-# Sample information file
-sample.info <- read.table(system.file("extdata/Sample_Info", "Sample_Info.txt", package="VALERIE"), sep="\t", header=FALSE, stringsAsFactors=FALSE)
-head(sample.info) ; tail(sample.info)
-
-# BAM files
-BAM <- system.file("extdata/BAM", "", package="VALERIE")
-head(list.files(BAM))
-
-## ----eval=FALSE----------------------------------------------------------
-#  # Compute PSI
-#  PSI <- ComputePSI(SampleInfo=system.file("extdata/Sample_Info", "Sample_Info.txt", package="VALERIE"), ExonInfo=system.file("extdata/Exon_Info", "Exon_Info.txt", package="VALERIE"), BAM=system.file("extdata/BAM", "", package="VALERIE"), MinCoverage=10)
+## ----eval=FALSE, message=FALSE, warning=FALSE---------------------------------
+#  # Read sample metadata
+#  path_to_file <- system.file("extdata", "BAM_PhenoData.txt", package="VALERIE")
+#  BamPheno <- read.table(path_to_file, sep="\t", header=TRUE, stringsAsFactors=FALSE)
+#  head(BamPheno)
 #  
-#  # Plot PSI (Output as shown in Figure 1)
-#  PlotPSI(object=PSI, SampleInfo=system.file("extdata/Sample_Info", "Sample_Info.txt", package="VALERIE"), ExonInfo=system.file("extdata/Exon_Info", "Exon_Info.txt", package="VALERIE"), statistical.test="wilcox", multiple.testing="bonferroni", Plots=tempdir(), plot.width=5, plot.height=8, EventType="SE", Groups=2)
+#  # Plot
+#  PlotPSI(tran_id="chr18:82554580:82554750:+@chr18:82561778:82561855:+@chr18:82572825:82572926",
+#          event.type="SE",
+#          strand="positive",
+#          Bam=system.file("extdata/BAM", package="VALERIE"),
+#          BamPheno=BamPheno,
+#          cell.types=c("Ctrl", "EAE"),
+#          min.coverage=10,
+#          cons.exon.cutoff=100,
+#          method="t.test",
+#          method.adj="bonferroni",
+#          cell.types.colors="ggplot.default",
+#          plot.title="Mbp",
+#          plot.width=5,
+#          plot.height=8,
+#          plot.out=system.file("extdata/Plots", "Mbp.pdf", package="VALERIE")
+#          )
 
-## ----message=FALSE-------------------------------------------------------
-# Check plot
-output <- system.file("extdata/Plots", "1_SE_Plots_Mbp.pdf", package="VALERIE")
-knitr::include_graphics(output)
+## ----message=FALSE, echo=FALSE, v,out.height = "555px", out.width='350px'-----
+path_to_file <- system.file("extdata/Plots", "Mbp.pdf", package="VALERIE")
+knitr::include_graphics(path_to_file)
 
