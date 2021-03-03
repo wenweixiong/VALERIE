@@ -16,4 +16,4 @@ Suggests: knitr, rmarkdown
 VignetteBuilder: knitr
 ByteCompile: true
 NeedsCompilation: no
-Packaged: 2021-03-03 03:50:55 UTC; seanwen
+Packaged: 2021-03-03 03:59:10 UTC; seanwen

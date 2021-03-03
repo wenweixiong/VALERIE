@@ -108,8 +108,8 @@ PlotPSI(tran_id="chr18:82554580:82554750:+@chr18:82561778:82561855:+@chr18:82572
 ```
 
 # Understanding the output
-```{r message=FALSE, echo=FALSE, v,out.height = "555px", out.width='350px'}
-path_to_file <- system.file("extdata/Plots", "Mbp.pdf", package="VALERIE")
+```{r message=FALSE, echo=FALSE}
+path_to_file <- system.file("extdata/Plots", "Mbp.png", package="VALERIE")
 knitr::include_graphics(path_to_file)
 ```
 

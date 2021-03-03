@@ -49,7 +49,7 @@ library(VALERIE)
 #          plot.out=system.file("extdata/Plots", "Mbp.pdf", package="VALERIE")
 #          )
 
-## ----message=FALSE, echo=FALSE, v,out.height = "555px", out.width='350px'-----
-path_to_file <- system.file("extdata/Plots", "Mbp.pdf", package="VALERIE")
+## ----message=FALSE, echo=FALSE------------------------------------------------
+path_to_file <- system.file("extdata/Plots", "Mbp.png", package="VALERIE")
 knitr::include_graphics(path_to_file)
 
