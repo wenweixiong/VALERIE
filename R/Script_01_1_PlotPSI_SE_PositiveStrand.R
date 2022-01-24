@@ -12,13 +12,14 @@
 #' @param cell.types Character string. Cell types to plot. Should be the same number of cell groups or less than the \code{cell.type} column of the \code{BamPheno} argument.
 #' @param min.coverage Numeric value. Coverage (Total reads) threshold below which the PSI value of the genomic coordinate is annotate as missing value, i.e. no coverage.
 #' @param cons.exon.cutoff Numeric value. Limit the number of bases to plot for the constitutive exons. This allow users to focus the plots on the alternative exon.
-#' @param method Character string. Statistical test to compare the PSI values across the different cell types. \code{"wilcox"}, \code{"t.test"}, and \code{"ks"} available for 2-group comparison. \code{"ANOVA"} and \code{"kw"} available for 3- or more group comparison. \code{"ks"} and \code{"kw"} represent Kolmogorov–Smirnov test and Kruskal-Wallis test, respectively.
+#' @param method Character string. Statistical test to compare the PSI values across the different cell types. \code{"wilcox"}, \code{"t.test"}, \code{"ks"}, and \code{"ad"} available for 2-group comparison. \code{"ANOVA"} and \code{"kw"} available for 3- or more group comparison. \code{"ks"}, \code{"ad"}, and \code{"kw"}, represent Kolmogorov–Smirnov, Anderson-Darling, and Kruskal-Wallis test, respectively.
 #' @param method.adj Character string. Adjust p-values for multiple testing. Options available as per \code{p.adjust} function.
 #' @param cell.types.colors Character string. Legend colors for each cell type. Should be of same length as \code{cell.types} argument. To use ggplot2 default color scheme, please specify \code{"ggplot.default"}.
 #' @param plot.title Character string. Main title for plot. Examples are gene ID, gene names, splicing ID etc..
 #' @param plot.width Numeric value. Width of plot.
 #' @param plot.height Numeric value. Height of plot.
 #' @param plot.out Character string. Path to folder to output plot.
+#' @param track Logical. If set to \code{TRUE} (default), a process of reading in the BAM files, which is the rate-limiting step, will be tracked on the console.
 #' @export
 #' @return A plot in PDF format located in the folder specified by \code{plot.out} argument.
 #' @author Sean Wen <sean.wenwx@gmail.com>
@@ -34,7 +35,8 @@
 #' @import scales
 #' @importFrom reshape2 dcast
 #' @import grDevices
-#' @examples
+#' @import grDevices
+#' @import kSamples
 #' # Read sample metadata
 #' path_to_file <- system.file("extdata", "BAM_PhenoData_Small.txt", package="VALERIE")
 #' BamPheno <- read.table(path_to_file, sep="\t", header=TRUE, stringsAsFactors=FALSE)
@@ -57,7 +59,7 @@
 #'  plot.out=paste(tempdir(), "Plot.pdf", sep="")
 #'  )
 
-PlotPSI.SE.Pos <- function(tran_id, Bam, BamPheno, cell.types, min.coverage, cons.exon.cutoff, method, method.adj, cell.types.colors, plot.title, plot.width, plot.height, plot.out) {
+PlotPSI.SE.Pos <- function(tran_id, Bam, BamPheno, cell.types, min.coverage, cons.exon.cutoff, method, method.adj, cell.types.colors, plot.title, plot.width, plot.height, plot.out, track=TRUE) {
         
     #tran_id <- "chr15:24962114:24962209:+@chr15:24967029:24967152:+@chr15:24967932:24968082"
     #Bam <- "/Users/seanwen/Documents/VALERIE/VALERIE/Dataset/BAM/"
@@ -65,13 +67,14 @@ PlotPSI.SE.Pos <- function(tran_id, Bam, BamPheno, cell.types, min.coverage, con
     #cell.types <- c("iPSC", "Endoderm")
     #min.coverage <- 10
     #cons.exon.cutoff <- 100
-    #method <- "ks"
+    #method <- "ad"
     #method.adj <- "fdr"
     #cell.types.colors <- "ggplot.default"
     #plot.title <- "SNRPN"
     #plot.width <- 5
     #plot.height <- 8
     #plot.out <- "/Users/seanwen/Documents/VALERIE/VALERIE/Dataset/Plots/SNRPN.pdf"
+    #track <- TRUE
     
     ##########################################################################
     ############################# PLOT COLORS ################################
@@ -211,10 +214,23 @@ PlotPSI.SE.Pos <- function(tran_id, Bam, BamPheno, cell.types, min.coverage, con
     
     bamfileGA.list <- vector(mode="list", length=length(files))
     
+    if(track==TRUE) {
+        
+        pb <- txtProgressBar(1, length(files), style=3)
+        
+    }
+    
     for(i in 1:length(files)) {
         
         # Read file
         bamfileGA.list[[i]] <- readGAlignments(file=paste(Bam, files[i], sep="/"), index=paste(Bam, files[i], sep="/"), param=ScanBamParam(which=gr))
+        
+        # Track progress
+        if(track==TRUE) {
+            
+            setTxtProgressBar(pb, i)
+            
+        }
                 
     }
                             
@@ -442,6 +458,47 @@ PlotPSI.SE.Pos <- function(tran_id, Bam, BamPheno, cell.types, min.coverage, con
                 y <- df.small[which(df.small$cell.type==cell.types[2]), "psi"]
             
                 p.val[i] <- ks.test(x, y)$p.value
+                
+                }
+            
+        }
+        
+        ###############################
+        
+    } else if(method=="ad") {
+
+        coords <- levels(df$chr.coord)
+        
+        for(i in 1:length(coords)) {
+            
+            df.small <- df[which(df$chr.coord==coords[i]), ]
+            
+            non.na <- tapply(df.small$psi, df.small$cell.type, function(x) {sum(!is.na(x))})
+            non.na <- non.na[which(non.na < 3)]
+            non.na <- length(non.na)
+            
+            if(non.na != 0) {
+                
+                p.val[i] <- NA
+                
+            } else {
+                
+                x <- df.small[which(df.small$cell.type==cell.types[1]), "psi"]
+                y <- df.small[which(df.small$cell.type==cell.types[2]), "psi"]
+            
+                
+                error.check <- tryCatch(ad.test(x, y), error=function(err) "Error")
+                
+                if(error.check[1] == "Error") {
+                
+                    p.val[i] <- 1
+                    
+                    
+                } else {
+                    
+                    p.val[i] <- ad.test(x, y, method="asymptotic")$ad[1,3]
+                
+                }
                 
                 }
             
