@@ -4,9 +4,22 @@
 \alias{PlotPSI.RI.Neg}
 \title{Plot percent spliced-in (PSI) values for retained-intron (RI) located on negative strand}
 \usage{
-PlotPSI.RI.Neg(tran_id, Bam, BamPheno, cell.types, min.coverage,
-  cons.exon.cutoff, method, method.adj, cell.types.colors, plot.title,
-  plot.width, plot.height, plot.out)
+PlotPSI.RI.Neg(
+  tran_id,
+  Bam,
+  BamPheno,
+  cell.types,
+  min.coverage,
+  cons.exon.cutoff,
+  method,
+  method.adj,
+  cell.types.colors,
+  plot.title,
+  plot.width,
+  plot.height,
+  plot.out,
+  track = TRUE
+)
 }
 \arguments{
 \item{tran_id}{Character string. Splicing event nomenclature.}
@@ -21,7 +34,7 @@ PlotPSI.RI.Neg(tran_id, Bam, BamPheno, cell.types, min.coverage,
 
 \item{cons.exon.cutoff}{Numeric value. Limit the number of bases to plot for the constitutive exons. This allow users to focus the plots on the alternative exon.}
 
-\item{method}{Character string. Statistical test to compare the PSI values across the different cell types. \code{"wilcox"}, \code{"t.test"}, and \code{"ks"} available for 2-group comparison. \code{"ANOVA"} and \code{"kw"} available for 3- or more group comparison. \code{"ks"} and \code{"kw"} represent Kolmogorov–Smirnov test and Kruskal-Wallis test, respectively.}
+\item{method}{Character string. Statistical test to compare the PSI values across the different cell types. \code{"wilcox"}, \code{"t.test"}, \code{"ks"}, and \code{"ad"} available for 2-group comparison. \code{"ANOVA"} and \code{"kw"} available for 3- or more group comparison. \code{"ks"}, \code{"ad"}, and \code{"kw"}, represent Kolmogorov–Smirnov, Anderson-Darling, and Kruskal-Wallis test, respectively.}
 
 \item{method.adj}{Character string. Adjust p-values for multiple testing. Options available as per \code{p.adjust} function.}
 
@@ -34,6 +47,8 @@ PlotPSI.RI.Neg(tran_id, Bam, BamPheno, cell.types, min.coverage,
 \item{plot.height}{Numeric value. Height of plot.}
 
 \item{plot.out}{Character string. Path to folder to output plot.}
+
+\item{track}{Logical. If set to \code{TRUE} (default), a process of reading in the BAM files, which is the rate-limiting step, will be tracked on the console.}
 }
 \value{
 A plot in PDF format located in the folder specified by \code{plot.out} argument.

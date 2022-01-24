@@ -37,6 +37,7 @@
 #' @import grDevices
 #' @import grDevices
 #' @import kSamples
+#' @examples
 #' # Read sample metadata
 #' path_to_file <- system.file("extdata", "BAM_PhenoData_Small.txt", package="VALERIE")
 #' BamPheno <- read.table(path_to_file, sep="\t", header=TRUE, stringsAsFactors=FALSE)
