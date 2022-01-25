@@ -15,6 +15,7 @@ PlotPSI(
   cons.exon.cutoff,
   method,
   method.adj,
+  sig.pval = 0.1,
   cell.types.colors,
   plot.title,
   plot.width,
@@ -43,6 +44,8 @@ PlotPSI(
 \item{method}{Character string. Statistical test to compare the PSI values across the different cell types. \code{"wilcox"}, \code{"t.test"}, \code{"ks"}, and \code{"ad"} available for 2-group comparison. \code{"ANOVA"} and \code{"kw"} available for 3- or more group comparison. \code{"ks"}, \code{"ad"}, and \code{"kw"}, represent Kolmogorov–Smirnov, Anderson-Darling, and Kruskal-Wallis test, respectively.}
 
 \item{method.adj}{Character string. Adjust p-values for multiple testing. Options available as per \code{p.adjust} function.}
+
+\item{sig.pval}{Numeric value. Adjust p-value, below which, the p-value is considered statistically significant.}
 
 \item{cell.types.colors}{Character string. Legend colors for each cell type. Should be of same length as \code{cell.types} argument. To use ggplot2 default color scheme, please specify \code{"ggplot.default"}.}
 

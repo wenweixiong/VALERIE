@@ -24,11 +24,12 @@ We have published VALERIE in PLoS Computation Biology: https://journals.plos.org
 
 # Version control
 **1.x.x** 
-The pioneer version.
+The pioneer version.  
 
 **2.0.0** 
-Previously, user can specify more than 1 splicing event to plot at a time. Now, user will specify only 1 splicing event to plot at a time. This will increase the speed of reading in the BAM files and also reduce the complexity of the internal codes.
+Previously, user can specify more than 1 splicing event to plot at a time. Now, user will specify only 1 splicing event to plot at a time. This will increase the speed of reading in the BAM files and also reduce the complexity of the internal codes.  
 
 **2.0.1** 
-(1) Anderson-darling added as an option for statistical testing of PSI values at each nucleotide position. User can activate this option by specifying "ad" for the _method_ argument.
-(2) Included a feature to track the progress of reading in the BAM files, which is the rate-limiting step of VALERIE. Hence, user can estimate the time of completion for plotting a given splicing event. User can activate this feature by specifying _TRUE_ for the _track_ argument.
+(1) Anderson-darling added as an option for statistical testing of PSI values at each nucleotide position. User can activate this option by specifying "ad" for the _method_ argument.  
+(2) Included a feature to track the progress of reading in the BAM files, which is the rate-limiting step of VALERIE. Hence, user can estimate the time of completion for plotting a given splicing event. User can activate this feature by specifying _TRUE_ for the _track_ argument.  
+(3)  Previouslu, an adjusted p-value of < 0.05 was considered statistically significant. Now, user can customise this threshold using the _sig.pval_ argument.

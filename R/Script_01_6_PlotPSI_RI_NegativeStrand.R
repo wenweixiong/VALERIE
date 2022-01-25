@@ -14,6 +14,7 @@
 #' @param cons.exon.cutoff Numeric value. Limit the number of bases to plot for the constitutive exons. This allow users to focus the plots on the alternative exon.
 #' @param method Character string. Statistical test to compare the PSI values across the different cell types. \code{"wilcox"}, \code{"t.test"}, \code{"ks"}, and \code{"ad"} available for 2-group comparison. \code{"ANOVA"} and \code{"kw"} available for 3- or more group comparison. \code{"ks"}, \code{"ad"}, and \code{"kw"}, represent Kolmogorov–Smirnov, Anderson-Darling, and Kruskal-Wallis test, respectively.
 #' @param method.adj Character string. Adjust p-values for multiple testing. Options available as per \code{p.adjust} function.
+#' @param sig.pval Numeric value. Adjust p-value, below which, the p-value is considered statistically significant.
 #' @param cell.types.colors Character string. Legend colors for each cell type. Should be of same length as \code{cell.types} argument. To use ggplot2 default color scheme, please specify \code{"ggplot.default"}.
 #' @param plot.title Character string. Main title for plot. Examples are gene ID, gene names, splicing ID etc..
 #' @param plot.width Numeric value. Width of plot.
@@ -56,7 +57,7 @@
 #'  )
 #'  }
 
-PlotPSI.RI.Neg <- function(tran_id, Bam, BamPheno, cell.types, min.coverage, cons.exon.cutoff, method, method.adj, cell.types.colors, plot.title, plot.width, plot.height, plot.out, track=TRUE) {
+PlotPSI.RI.Neg <- function(tran_id, Bam, BamPheno, cell.types, min.coverage, cons.exon.cutoff, method, method.adj, sig.pval=0.10, cell.types.colors, plot.title, plot.width, plot.height, plot.out, track=TRUE) {
         
     #tran_id <- "chr6:73519228:73519128:-@chr6:73519064:73518932"
     #Bam <- "/Users/seanwen/Documents/VALERIE/VALERIE/Dataset/BAM/"
@@ -72,6 +73,7 @@ PlotPSI.RI.Neg <- function(tran_id, Bam, BamPheno, cell.types, min.coverage, con
     #plot.height <- 8
     #plot.out <- "/Users/seanwen/Documents/VALERIE/VALERIE/Dataset/Plots/EEF1A1.pdf"
     #track <- TRUE
+    #sig.pval <- 0.10
     
     ##########################################################################
     ############################# PLOT COLORS ################################
@@ -654,7 +656,7 @@ PlotPSI.RI.Neg <- function(tran_id, Bam, BamPheno, cell.types, min.coverage, con
     # Plot
     p3 <- ggplot(data=df.pval, aes(x=chr.coord, y=p.val.adj.transformed, group=1)) +
             geom_line() +
-            geom_hline(yintercept=-log10(0.05), col="red", linetype="dashed") +
+            geom_hline(yintercept=-log10(sig.pval), col="red", linetype="dashed") +
             labs(x=NULL, y="-log10(p-value)") +
             scale_y_continuous(labels=scales::number_format(accuracy=accuracy),
                                limits=c(0, max(df.pval$p.val.adj.transformed)), position="right") +

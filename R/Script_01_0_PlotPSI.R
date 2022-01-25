@@ -16,6 +16,7 @@
 #' @param cons.exon.cutoff Numeric value. Limit the number of bases to plot for the constitutive exons. This allow users to focus the plots on the alternative exon.
 #' @param method Character string. Statistical test to compare the PSI values across the different cell types. \code{"wilcox"}, \code{"t.test"}, \code{"ks"}, and \code{"ad"} available for 2-group comparison. \code{"ANOVA"} and \code{"kw"} available for 3- or more group comparison. \code{"ks"}, \code{"ad"}, and \code{"kw"}, represent Kolmogorov–Smirnov, Anderson-Darling, and Kruskal-Wallis test, respectively.
 #' @param method.adj Character string. Adjust p-values for multiple testing. Options available as per \code{p.adjust} function.
+#' @param sig.pval Numeric value. Adjust p-value, below which, the p-value is considered statistically significant.
 #' @param cell.types.colors Character string. Legend colors for each cell type. Should be of same length as \code{cell.types} argument. To use ggplot2 default color scheme, please specify \code{"ggplot.default"}.
 #' @param plot.title Character string. Main title for plot. Examples are gene ID, gene names, splicing ID etc..
 #' @param plot.width Numeric value. Width of plot.
@@ -63,14 +64,14 @@
 #'  plot.out=paste(tempdir(), "Plot.pdf", sep="")
 #'  )
 
-PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.coverage, cons.exon.cutoff, method, method.adj, cell.types.colors, plot.title, plot.width, plot.height, plot.out, track=TRUE) {
+PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.coverage, cons.exon.cutoff, method, method.adj, sig.pval=0.10, cell.types.colors, plot.title, plot.width, plot.height, plot.out, track=TRUE) {
         
     if(event.type=="SE" & strand=="positive") {
         
         PlotPSI.SE.Pos(tran_id=tran_id, Bam=Bam, BamPheno=BamPheno,
                        cell.types=cell.types, min.coverage=min.coverage,
                        cons.exon.cutoff=cons.exon.cutoff, method=method,
-                       method.adj=method.adj, cell.types.colors=cell.types.colors,
+                       method.adj=method.adj, sig.pval, cell.types.colors=cell.types.colors,
                        plot.title=plot.title, plot.width=plot.width, plot.height=plot.height,
                        plot.out=plot.out,
                        track=track)
@@ -80,7 +81,7 @@ PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.
         PlotPSI.SE.Neg(tran_id=tran_id, Bam=Bam, BamPheno=BamPheno,
                        cell.types=cell.types, min.coverage=min.coverage,
                        cons.exon.cutoff=cons.exon.cutoff, method=method,
-                       method.adj=method.adj, cell.types.colors=cell.types.colors,
+                       method.adj=method.adj, sig.pval, cell.types.colors=cell.types.colors,
                        plot.title=plot.title, plot.width=plot.width, plot.height=plot.height,
                        plot.out=plot.out,
                        track=track)
@@ -90,7 +91,7 @@ PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.
         PlotPSI.MXE.Pos(tran_id=tran_id, Bam=Bam, BamPheno=BamPheno,
                        cell.types=cell.types, min.coverage=min.coverage,
                        cons.exon.cutoff=cons.exon.cutoff, method=method,
-                       method.adj=method.adj, cell.types.colors=cell.types.colors,
+                       method.adj=method.adj, sig.pval, cell.types.colors=cell.types.colors,
                        plot.title=plot.title, plot.width=plot.width, plot.height=plot.height,
                        plot.out=plot.out,
                        track=track)
@@ -100,7 +101,7 @@ PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.
         PlotPSI.MXE.Neg(tran_id=tran_id, Bam=Bam, BamPheno=BamPheno,
                        cell.types=cell.types, min.coverage=min.coverage,
                        cons.exon.cutoff=cons.exon.cutoff, method=method,
-                       method.adj=method.adj, cell.types.colors=cell.types.colors,
+                       method.adj=method.adj, sig.pval, cell.types.colors=cell.types.colors,
                        plot.title=plot.title, plot.width=plot.width, plot.height=plot.height,
                        plot.out=plot.out,
                        track=track)
@@ -110,7 +111,7 @@ PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.
         PlotPSI.RI.Pos(tran_id=tran_id, Bam=Bam, BamPheno=BamPheno,
                        cell.types=cell.types, min.coverage=min.coverage,
                        cons.exon.cutoff=cons.exon.cutoff, method=method,
-                       method.adj=method.adj, cell.types.colors=cell.types.colors,
+                       method.adj=method.adj, sig.pval, cell.types.colors=cell.types.colors,
                        plot.title=plot.title, plot.width=plot.width, plot.height=plot.height,
                        plot.out=plot.out,
                        track=track)
@@ -120,7 +121,7 @@ PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.
         PlotPSI.RI.Neg(tran_id=tran_id, Bam=Bam, BamPheno=BamPheno,
                        cell.types=cell.types, min.coverage=min.coverage,
                        cons.exon.cutoff=cons.exon.cutoff, method=method,
-                       method.adj=method.adj, cell.types.colors=cell.types.colors,
+                       method.adj=method.adj, sig.pval, cell.types.colors=cell.types.colors,
                        plot.title=plot.title, plot.width=plot.width, plot.height=plot.height,
                        plot.out=plot.out,
                        track=track)
@@ -130,7 +131,7 @@ PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.
         PlotPSI.A5SS.Pos(tran_id=tran_id, Bam=Bam, BamPheno=BamPheno,
                        cell.types=cell.types, min.coverage=min.coverage,
                        cons.exon.cutoff=cons.exon.cutoff, method=method,
-                       method.adj=method.adj, cell.types.colors=cell.types.colors,
+                       method.adj=method.adj, sig.pval, cell.types.colors=cell.types.colors,
                        plot.title=plot.title, plot.width=plot.width, plot.height=plot.height,
                        plot.out=plot.out,
                        track=track)
@@ -140,7 +141,7 @@ PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.
         PlotPSI.A5SS.Neg(tran_id=tran_id, Bam=Bam, BamPheno=BamPheno,
                        cell.types=cell.types, min.coverage=min.coverage,
                        cons.exon.cutoff=cons.exon.cutoff, method=method,
-                       method.adj=method.adj, cell.types.colors=cell.types.colors,
+                       method.adj=method.adj, sig.pval, cell.types.colors=cell.types.colors,
                        plot.title=plot.title, plot.width=plot.width, plot.height=plot.height,
                        plot.out=plot.out,
                        track=track)
@@ -150,7 +151,7 @@ PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.
         PlotPSI.A3SS.Pos(tran_id=tran_id, Bam=Bam, BamPheno=BamPheno,
                        cell.types=cell.types, min.coverage=min.coverage,
                        cons.exon.cutoff=cons.exon.cutoff, method=method,
-                       method.adj=method.adj, cell.types.colors=cell.types.colors,
+                       method.adj=method.adj, sig.pval, cell.types.colors=cell.types.colors,
                        plot.title=plot.title, plot.width=plot.width, plot.height=plot.height,
                        plot.out=plot.out,
                        track=track)
@@ -160,7 +161,7 @@ PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.
         PlotPSI.A3SS.Neg(tran_id=tran_id, Bam=Bam, BamPheno=BamPheno,
                        cell.types=cell.types, min.coverage=min.coverage,
                        cons.exon.cutoff=cons.exon.cutoff, method=method,
-                       method.adj=method.adj, cell.types.colors=cell.types.colors,
+                       method.adj=method.adj, sig.pval, cell.types.colors=cell.types.colors,
                        plot.title=plot.title, plot.width=plot.width, plot.height=plot.height,
                        plot.out=plot.out,
                        track=track)
