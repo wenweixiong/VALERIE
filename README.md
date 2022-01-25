@@ -32,4 +32,4 @@ Previously, user can specify more than 1 splicing event to plot at a time. Now, 
 **2.0.1** 
 (1) Anderson-darling added as an option for statistical testing of PSI values at each nucleotide position. User can activate this option by specifying "ad" for the _method_ argument.  
 (2) Included a feature to track the progress of reading in the BAM files, which is the rate-limiting step of VALERIE. Hence, user can estimate the time of completion for plotting a given splicing event. User can activate this feature by specifying _TRUE_ for the _track_ argument.  
-(3)  Previouslu, an adjusted p-value of < 0.05 was considered statistically significant. Now, user can customise this threshold using the _sig.pval_ argument.
+(3)  Previously, an adjusted p-value of < 0.05 was considered statistically significant. Now, user can customise this threshold using the _sig.pval_ argument.
