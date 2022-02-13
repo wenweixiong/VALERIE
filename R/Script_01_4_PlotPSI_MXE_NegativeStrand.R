@@ -414,7 +414,7 @@ PlotPSI.MXE.Neg <- function(tran_id, Bam, BamPheno, cell.types, min.coverage, co
                 
             } else {
                 
-            p.val[i] <- wilcox.test(psi ~ cell.type, df.small)$p.value
+            p.val[i] <- wilcox.test(psi ~ cell.type, na.omit(df.small))$p.value
             
             }
             
@@ -440,7 +440,7 @@ PlotPSI.MXE.Neg <- function(tran_id, Bam, BamPheno, cell.types, min.coverage, co
                 
             } else {
             
-            p.val[i] <- t.test(psi ~ cell.type, df.small)$p.value
+            p.val[i] <- t.test(psi ~ cell.type, na.omit(df.small))$p.value
             
             }
             
@@ -468,13 +468,16 @@ PlotPSI.MXE.Neg <- function(tran_id, Bam, BamPheno, cell.types, min.coverage, co
                 
                 x <- df.small[which(df.small$cell.type==cell.types[1]), "psi"]
                 y <- df.small[which(df.small$cell.type==cell.types[2]), "psi"]
-            
+                
+                x <- na.omit(x)
+                y <- na.omit(y)
+                
                 p.val[i] <- ks.test(x, y)$p.value
                 
                 }
             
         }
-
+        
         ###############################
         
     } else if(method=="ad") {
@@ -498,6 +501,8 @@ PlotPSI.MXE.Neg <- function(tran_id, Bam, BamPheno, cell.types, min.coverage, co
                 x <- df.small[which(df.small$cell.type==cell.types[1]), "psi"]
                 y <- df.small[which(df.small$cell.type==cell.types[2]), "psi"]
             
+                x <- na.omit(x)
+                y <- na.omit(y)
                 
                 error.check <- tryCatch(ad.test(x, y), error=function(err) "Error")
                 
@@ -512,12 +517,12 @@ PlotPSI.MXE.Neg <- function(tran_id, Bam, BamPheno, cell.types, min.coverage, co
                 
                 }
                 
-                }
+            }
             
         }
         
         ###############################
-
+    
     } else if(method=="dts") {
 
         coords <- levels(df$chr.coord)
@@ -538,6 +543,9 @@ PlotPSI.MXE.Neg <- function(tran_id, Bam, BamPheno, cell.types, min.coverage, co
                 
                 x <- df.small[which(df.small$cell.type==cell.types[1]), "psi"]
                 y <- df.small[which(df.small$cell.type==cell.types[2]), "psi"]
+                
+                x <- na.omit(x)
+                y <- na.omit(y)
             
                 p.val[i] <- dts_test(x, y, nboots=nboots)[2]
                 
@@ -565,7 +573,7 @@ PlotPSI.MXE.Neg <- function(tran_id, Bam, BamPheno, cell.types, min.coverage, co
                 
             } else {
                 
-            p.val[i] <- summary(aov(psi ~ cell.type, df.small))[[1]][["Pr(>F)"]][1]
+            p.val[i] <- summary(aov(psi ~ cell.type, na.omit(df.small)))[[1]][["Pr(>F)"]][1]
             
             }
             
@@ -591,7 +599,7 @@ PlotPSI.MXE.Neg <- function(tran_id, Bam, BamPheno, cell.types, min.coverage, co
                 
             } else {
                 
-            p.val[i] <- kruskal.test(psi ~ cell.type, df.small)$p.value
+            p.val[i] <- kruskal.test(psi ~ cell.type, na.omit(df.small))$p.value
             
             }
             
