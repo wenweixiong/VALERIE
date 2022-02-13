@@ -19,7 +19,8 @@ PlotPSI.A3SS.Pos(
   plot.width,
   plot.height,
   plot.out,
-  track = TRUE
+  track = TRUE,
+  nboots = 2000
 )
 }
 \arguments{

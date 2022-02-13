@@ -38,6 +38,7 @@
 #' @import grDevices
 #' @import grDevices
 #' @import kSamples
+#' @import twosamples
 #' @examples
 #' # Read sample metadata
 #' path_to_file <- system.file("extdata", "BAM_PhenoData_Small.txt", package="VALERIE")
@@ -61,7 +62,7 @@
 #'  plot.out=paste(tempdir(), "Plot.pdf", sep="")
 #'  )
 
-PlotPSI.SE.Pos <- function(tran_id, Bam, BamPheno, cell.types, min.coverage, cons.exon.cutoff, method, method.adj, sig.pval=0.10, cell.types.colors, plot.title, plot.width, plot.height, plot.out, track=TRUE) {
+PlotPSI.SE.Pos <- function(tran_id, Bam, BamPheno, cell.types, min.coverage, cons.exon.cutoff, method, method.adj, sig.pval=0.10, cell.types.colors, plot.title, plot.width, plot.height, plot.out, track=TRUE, nboots=2000) {
         
     #tran_id <- "chr15:24962114:24962209:+@chr15:24967029:24967152:+@chr15:24967932:24968082"
     #Bam <- "/Users/seanwen/Documents/VALERIE/VALERIE/Dataset/BAM/"
@@ -508,6 +509,35 @@ PlotPSI.SE.Pos <- function(tran_id, Bam, BamPheno, cell.types, min.coverage, con
         }
         
         ###############################
+    
+    } else if(method=="dts") {
+
+        coords <- levels(df$chr.coord)
+        
+        for(i in 1:length(coords)) {
+            
+            df.small <- df[which(df$chr.coord==coords[i]), ]
+            
+            non.na <- tapply(df.small$psi, df.small$cell.type, function(x) {sum(!is.na(x))})
+            non.na <- non.na[which(non.na < 3)]
+            non.na <- length(non.na)
+            
+            if(non.na != 0) {
+                
+                p.val[i] <- NA
+                
+            } else {
+                
+                x <- df.small[which(df.small$cell.type==cell.types[1]), "psi"]
+                y <- df.small[which(df.small$cell.type==cell.types[2]), "psi"]
+            
+                p.val[i] <- dts_test(x, y, nboots=nboots)[2]
+                
+                }
+            
+        }
+        
+        ###############################
         
     } else if(method=="ANOVA") {
         
@@ -563,7 +593,16 @@ PlotPSI.SE.Pos <- function(tran_id, Bam, BamPheno, cell.types, min.coverage, con
         
     }
     
-    p.val.adj <- p.adjust(p.val, method=method.adj, n=length(p.val))
+    if(method != "dts") {
+        
+        p.val.adj <- p.adjust(p.val, method=method.adj, n=length(p.val))
+        
+    } else if(method == "dts"){
+        
+        p.val.adj <- p.adjust(p.val, method="none", n=length(p.val))
+        
+    }
+   
     p.val.adj[is.na(p.val.adj)] <- NA
     set.seed(1)
     p.val.adj[p.val.adj == 0 & !is.na(p.val.adj)] <- runif(n=length(p.val.adj[p.val.adj == 0 & !is.na(p.val.adj)]),

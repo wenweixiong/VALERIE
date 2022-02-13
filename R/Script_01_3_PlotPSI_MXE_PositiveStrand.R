@@ -37,6 +37,7 @@
 #' @importFrom reshape2 dcast
 #' @import grDevices
 #' @import kSamples
+#' @import twosamples
 #' @examples
 #' \donttest{
 #' # DO NOT RUN
@@ -59,7 +60,7 @@
 #'  }
 
 
-PlotPSI.MXE.Pos <- function(tran_id, Bam, BamPheno, cell.types, min.coverage, cons.exon.cutoff, method, method.adj, sig.pval=0.10, cell.types.colors, plot.title, plot.width, plot.height, plot.out, track=TRUE) {
+PlotPSI.MXE.Pos <- function(tran_id, Bam, BamPheno, cell.types, min.coverage, cons.exon.cutoff, method, method.adj, sig.pval=0.10, cell.types.colors, plot.title, plot.width, plot.height, plot.out, track=TRUE, nboots=2000) {
         
     #tran_id <- "chr2:271866:271939:+@chr2:272037:272150:+@chr2:272192:272305:+@chr2:275140:275201"
     #Bam <- "/Users/seanwen/Documents/VALERIE/VALERIE/Dataset/BAM/"
@@ -514,7 +515,36 @@ PlotPSI.MXE.Pos <- function(tran_id, Bam, BamPheno, cell.types, min.coverage, co
         }
         
         ###############################
+
+    } else if(method=="dts") {
+
+        coords <- levels(df$chr.coord)
         
+        for(i in 1:length(coords)) {
+            
+            df.small <- df[which(df$chr.coord==coords[i]), ]
+            
+            non.na <- tapply(df.small$psi, df.small$cell.type, function(x) {sum(!is.na(x))})
+            non.na <- non.na[which(non.na < 3)]
+            non.na <- length(non.na)
+            
+            if(non.na != 0) {
+                
+                p.val[i] <- NA
+                
+            } else {
+                
+                x <- df.small[which(df.small$cell.type==cell.types[1]), "psi"]
+                y <- df.small[which(df.small$cell.type==cell.types[2]), "psi"]
+            
+                p.val[i] <- dts_test(x, y, nboots=nboots)[2]
+                
+                }
+            
+        }
+        
+        ###############################
+
     } else if(method=="ANOVA") {
         
         coords <- levels(df$chr.coord)
@@ -569,7 +599,16 @@ PlotPSI.MXE.Pos <- function(tran_id, Bam, BamPheno, cell.types, min.coverage, co
         
     }
     
-    p.val.adj <- p.adjust(p.val, method=method.adj, n=length(p.val))
+    if(method != "dts") {
+        
+        p.val.adj <- p.adjust(p.val, method=method.adj, n=length(p.val))
+        
+    } else if(method == "dts"){
+        
+        p.val.adj <- p.adjust(p.val, method="none", n=length(p.val))
+        
+    }
+    
     p.val.adj[is.na(p.val.adj)] <- NA
     set.seed(1)
     p.val.adj[p.val.adj == 0 & !is.na(p.val.adj)] <- runif(n=length(p.val.adj[p.val.adj == 0 & !is.na(p.val.adj)]),

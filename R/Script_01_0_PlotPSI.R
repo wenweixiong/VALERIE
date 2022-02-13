@@ -39,6 +39,7 @@
 #' @importFrom reshape2 dcast
 #' @import grDevices
 #' @import kSamples
+#' @import twosamples
 #' @examples
 #' # Read sample metadata
 #' path_to_file <- system.file("extdata", "BAM_PhenoData_Small.txt", package="VALERIE")
@@ -64,7 +65,7 @@
 #'  plot.out=paste(tempdir(), "Plot.pdf", sep="")
 #'  )
 
-PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.coverage, cons.exon.cutoff, method, method.adj, sig.pval=0.10, cell.types.colors, plot.title, plot.width, plot.height, plot.out, track=TRUE) {
+PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.coverage, cons.exon.cutoff, method, method.adj, sig.pval=0.10, cell.types.colors, plot.title, plot.width, plot.height, plot.out, track=TRUE, nboots=2000) {
         
     if(event.type=="SE" & strand=="positive") {
         
@@ -74,7 +75,7 @@ PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.
                        method.adj=method.adj, sig.pval, cell.types.colors=cell.types.colors,
                        plot.title=plot.title, plot.width=plot.width, plot.height=plot.height,
                        plot.out=plot.out,
-                       track=track)
+                       track=track, nboots=nboots)
         
     } else if(event.type=="SE" & strand=="negative") {
         
@@ -84,7 +85,7 @@ PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.
                        method.adj=method.adj, sig.pval, cell.types.colors=cell.types.colors,
                        plot.title=plot.title, plot.width=plot.width, plot.height=plot.height,
                        plot.out=plot.out,
-                       track=track)
+                       track=track, nboots=nboots)
                        
     } else if(event.type=="MXE" & strand=="positive") {
         
@@ -94,7 +95,7 @@ PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.
                        method.adj=method.adj, sig.pval, cell.types.colors=cell.types.colors,
                        plot.title=plot.title, plot.width=plot.width, plot.height=plot.height,
                        plot.out=plot.out,
-                       track=track)
+                       track=track, nboots=nboots)
                        
     } else if(event.type=="MXE" & strand=="negative") {
         
@@ -104,7 +105,7 @@ PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.
                        method.adj=method.adj, sig.pval, cell.types.colors=cell.types.colors,
                        plot.title=plot.title, plot.width=plot.width, plot.height=plot.height,
                        plot.out=plot.out,
-                       track=track)
+                       track=track, nboots=nboots)
 
     } else if(event.type=="RI" & strand=="positive") {
         
@@ -114,7 +115,7 @@ PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.
                        method.adj=method.adj, sig.pval, cell.types.colors=cell.types.colors,
                        plot.title=plot.title, plot.width=plot.width, plot.height=plot.height,
                        plot.out=plot.out,
-                       track=track)
+                       track=track, nboots=nboots)
 
     } else if(event.type=="RI" & strand=="negative") {
         
@@ -124,7 +125,7 @@ PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.
                        method.adj=method.adj, sig.pval, cell.types.colors=cell.types.colors,
                        plot.title=plot.title, plot.width=plot.width, plot.height=plot.height,
                        plot.out=plot.out,
-                       track=track)
+                       track=track, nboots=nboots)
 
     } else if(event.type=="A5SS" & strand=="positive") {
         
@@ -134,7 +135,7 @@ PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.
                        method.adj=method.adj, sig.pval, cell.types.colors=cell.types.colors,
                        plot.title=plot.title, plot.width=plot.width, plot.height=plot.height,
                        plot.out=plot.out,
-                       track=track)
+                       track=track, nboots=nboots)
 
     } else if(event.type=="A5SS" & strand=="negative") {
         
@@ -144,7 +145,7 @@ PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.
                        method.adj=method.adj, sig.pval, cell.types.colors=cell.types.colors,
                        plot.title=plot.title, plot.width=plot.width, plot.height=plot.height,
                        plot.out=plot.out,
-                       track=track)
+                       track=track, nboots=nboots)
                        
     } else if(event.type=="A3SS" & strand=="positive") {
         
@@ -154,7 +155,7 @@ PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.
                        method.adj=method.adj, sig.pval, cell.types.colors=cell.types.colors,
                        plot.title=plot.title, plot.width=plot.width, plot.height=plot.height,
                        plot.out=plot.out,
-                       track=track)
+                       track=track, nboots=nboots)
 
     } else if(event.type=="A3SS" & strand=="negative") {
         
@@ -164,7 +165,7 @@ PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.
                        method.adj=method.adj, sig.pval, cell.types.colors=cell.types.colors,
                        plot.title=plot.title, plot.width=plot.width, plot.height=plot.height,
                        plot.out=plot.out,
-                       track=track)
+                       track=track, nboots=nboots)
 
     }
 
