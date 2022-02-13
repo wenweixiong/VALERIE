@@ -36,7 +36,7 @@ PlotPSI.RI.Neg(
 
 \item{cons.exon.cutoff}{Numeric value. Limit the number of bases to plot for the constitutive exons. This allow users to focus the plots on the alternative exon.}
 
-\item{method}{Character string. Statistical test to compare the PSI values across the different cell types. \code{"wilcox"}, \code{"t.test"}, \code{"ks"}, and \code{"ad"} available for 2-group comparison. \code{"ANOVA"} and \code{"kw"} available for 3- or more group comparison. \code{"ks"}, \code{"ad"}, and \code{"kw"}, represent Kolmogorov–Smirnov, Anderson-Darling, and Kruskal-Wallis test, respectively.}
+\item{method}{Character string. Statistical test to compare the PSI values across the different cell types. \code{"wilcox"}, \code{"t.test"}, \code{"ks"}, \code{"ad"}, and \code{"dts"} available for 2-group comparison. \code{"ANOVA"} and \code{"kw"} available for 3- or more group comparison. \code{"ks"}, \code{"ad"}, \code{"dts"}, and \code{"kw"}, represent Kolmogorov–Smirnov, Anderson-Darling, DTS, and Kruskal-Wallis test, respectively.}
 
 \item{method.adj}{Character string. Adjust p-values for multiple testing. Options available as per \code{p.adjust} function.}
 
@@ -53,6 +53,8 @@ PlotPSI.RI.Neg(
 \item{plot.out}{Character string. Path to folder to output plot.}
 
 \item{track}{Logical. If set to \code{TRUE} (default), a process of reading in the BAM files, which is the rate-limiting step, will be tracked on the console.}
+
+\item{nboots}{Numeric value. When \code{method} set to \code{"dts"}, the number of bootstrap iterations for computing the p-value.}
 }
 \value{
 A plot in PDF format located in the folder specified by \code{plot.out} argument.
