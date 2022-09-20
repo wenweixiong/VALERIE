@@ -24,6 +24,7 @@
 #' @param plot.out Character string. Path to folder to output plot.
 #' @param track Logical. If set to \code{TRUE} (default), a process of reading in the BAM files, which is the rate-limiting step, will be tracked on the console.
 #' @param nboots Numeric value. When \code{method} set to \code{"dts"}, the number of bootstrap iterations for computing the p-value.
+#' @param show.mean.ci Logical value. If set to \code{TRUE}, the 95percent confidence interval of the per-cell group mean PSI values will not be shown. Default is \code{FALSE}.
 #' @export
 #' @return A plot in PDF format located in the folder specified by \code{plot.out} argument.
 #' @author Sean Wen <sean.wenwx@gmail.com>
@@ -66,7 +67,7 @@
 #'  plot.out=paste(tempdir(), "Plot.pdf", sep="")
 #'  )
 
-PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.coverage, cons.exon.cutoff, method, method.adj, sig.pval=0.10, cell.types.colors, plot.title, plot.width, plot.height, plot.out, track=TRUE, nboots=2000) {
+PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.coverage, cons.exon.cutoff, method, method.adj, sig.pval=0.10, cell.types.colors, plot.title, plot.width, plot.height, plot.out, track=TRUE, nboots=2000, show.mean.ci=TRUE) {
         
     if(event.type=="SE" & strand=="positive") {
         
@@ -76,7 +77,7 @@ PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.
                        method.adj=method.adj, sig.pval, cell.types.colors=cell.types.colors,
                        plot.title=plot.title, plot.width=plot.width, plot.height=plot.height,
                        plot.out=plot.out,
-                       track=track, nboots=nboots)
+                       track=track, nboots=nboots, show.mean.ci=show.mean.ci)
         
     } else if(event.type=="SE" & strand=="negative") {
         
@@ -86,7 +87,7 @@ PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.
                        method.adj=method.adj, sig.pval, cell.types.colors=cell.types.colors,
                        plot.title=plot.title, plot.width=plot.width, plot.height=plot.height,
                        plot.out=plot.out,
-                       track=track, nboots=nboots)
+                       track=track, nboots=nboots, show.mean.ci=show.mean.ci)
                        
     } else if(event.type=="MXE" & strand=="positive") {
         
@@ -96,7 +97,7 @@ PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.
                        method.adj=method.adj, sig.pval, cell.types.colors=cell.types.colors,
                        plot.title=plot.title, plot.width=plot.width, plot.height=plot.height,
                        plot.out=plot.out,
-                       track=track, nboots=nboots)
+                       track=track, nboots=nboots, show.mean.ci=show.mean.ci)
                        
     } else if(event.type=="MXE" & strand=="negative") {
         
@@ -106,7 +107,7 @@ PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.
                        method.adj=method.adj, sig.pval, cell.types.colors=cell.types.colors,
                        plot.title=plot.title, plot.width=plot.width, plot.height=plot.height,
                        plot.out=plot.out,
-                       track=track, nboots=nboots)
+                       track=track, nboots=nboots, show.mean.ci=show.mean.ci)
 
     } else if(event.type=="RI" & strand=="positive") {
         
@@ -116,7 +117,7 @@ PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.
                        method.adj=method.adj, sig.pval, cell.types.colors=cell.types.colors,
                        plot.title=plot.title, plot.width=plot.width, plot.height=plot.height,
                        plot.out=plot.out,
-                       track=track, nboots=nboots)
+                       track=track, nboots=nboots, show.mean.ci=show.mean.ci)
 
     } else if(event.type=="RI" & strand=="negative") {
         
@@ -126,7 +127,7 @@ PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.
                        method.adj=method.adj, sig.pval, cell.types.colors=cell.types.colors,
                        plot.title=plot.title, plot.width=plot.width, plot.height=plot.height,
                        plot.out=plot.out,
-                       track=track, nboots=nboots)
+                       track=track, nboots=nboots, show.mean.ci=show.mean.ci)
 
     } else if(event.type=="A5SS" & strand=="positive") {
         
@@ -136,7 +137,7 @@ PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.
                        method.adj=method.adj, sig.pval, cell.types.colors=cell.types.colors,
                        plot.title=plot.title, plot.width=plot.width, plot.height=plot.height,
                        plot.out=plot.out,
-                       track=track, nboots=nboots)
+                       track=track, nboots=nboots, show.mean.ci=show.mean.ci)
 
     } else if(event.type=="A5SS" & strand=="negative") {
         
@@ -146,7 +147,7 @@ PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.
                        method.adj=method.adj, sig.pval, cell.types.colors=cell.types.colors,
                        plot.title=plot.title, plot.width=plot.width, plot.height=plot.height,
                        plot.out=plot.out,
-                       track=track, nboots=nboots)
+                       track=track, nboots=nboots, show.mean.ci=show.mean.ci)
                        
     } else if(event.type=="A3SS" & strand=="positive") {
         
@@ -156,7 +157,7 @@ PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.
                        method.adj=method.adj, sig.pval, cell.types.colors=cell.types.colors,
                        plot.title=plot.title, plot.width=plot.width, plot.height=plot.height,
                        plot.out=plot.out,
-                       track=track, nboots=nboots)
+                       track=track, nboots=nboots, show.mean.ci=show.mean.ci)
 
     } else if(event.type=="A3SS" & strand=="negative") {
         
@@ -166,7 +167,7 @@ PlotPSI <- function(tran_id, event.type, strand, Bam, BamPheno, cell.types, min.
                        method.adj=method.adj, sig.pval, cell.types.colors=cell.types.colors,
                        plot.title=plot.title, plot.width=plot.width, plot.height=plot.height,
                        plot.out=plot.out,
-                       track=track, nboots=nboots)
+                       track=track, nboots=nboots, show.mean.ci=show.mean.ci)
 
     }
 

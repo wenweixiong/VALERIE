@@ -36,3 +36,7 @@ Previously, user can specify more than 1 splicing event to plot at a time. Now, 
 
 **2.1.1**  
 (1) DTS (https://arxiv.org/pdf/2007.01360.pdf) added as an option for statistical testing of PSI values at each nucleotide position. User can activate this option by specifying "dts" for the _method_ argument.  
+
+**2.1.2**  
+(1) Fixed bugs related to cell group and cell group color matching.
+(2) Included option (_show.mean.ci=FALSE_) to not show 95% confidence interval for mean PSI plot. Default _show.mean.ci=TRUE_

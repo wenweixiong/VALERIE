@@ -22,6 +22,7 @@
 #' @param plot.out Character string. Path to folder to output plot.
 #' @param track Logical. If set to \code{TRUE} (default), a process of reading in the BAM files, which is the rate-limiting step, will be tracked on the console.
 #' @param nboots Numeric value. When \code{method} set to \code{"dts"}, the number of bootstrap iterations for computing the p-value.
+#' @param show.mean.ci Logical value. If set to \code{TRUE}, the 95percent confidence interval of the per-cell group mean PSI values will not be shown. Default is \code{FALSE}.
 #' @export
 #' @return A plot in PDF format located in the folder specified by \code{plot.out} argument.
 #' @author Sean Wen <sean.wenwx@gmail.com>
@@ -60,7 +61,7 @@
 #'  )
 #'  }
 
-PlotPSI.A3SS.Neg <- function(tran_id, Bam, BamPheno, cell.types, min.coverage, cons.exon.cutoff, method, method.adj, sig.pval=0.10, cell.types.colors, plot.title, plot.width, plot.height, plot.out, track=TRUE, nboots=2000) {
+PlotPSI.A3SS.Neg <- function(tran_id, Bam, BamPheno, cell.types, min.coverage, cons.exon.cutoff, method, method.adj, sig.pval=0.10, cell.types.colors, plot.title, plot.width, plot.height, plot.out, track=TRUE, nboots=2000, show.mean.ci=TRUE) {
         
     #tran_id <- "chr5:135360497:135360604:-@chr5:135353045|135359942:135352946"
     #Bam <- "/Users/seanwen/Documents/VALERIE/VALERIE/Dataset/BAM/"
@@ -77,6 +78,11 @@ PlotPSI.A3SS.Neg <- function(tran_id, Bam, BamPheno, cell.types, min.coverage, c
     #plot.out <- "/Users/seanwen/Documents/VALERIE/VALERIE/Dataset/Plots/H2AFY.pdf"
     #track <- TRUE
     #sig.pval <- 0.10
+    
+    ##########################################################################
+
+    # Determine cell group order
+    cell.types <- factor(cell.types, levels=cell.types)
     
     ##########################################################################
     ############################# PLOT COLORS ################################
@@ -739,24 +745,51 @@ PlotPSI.A3SS.Neg <- function(tran_id, Bam, BamPheno, cell.types, min.coverage, c
     }
         
     # Plot
-    p2 <- ggplot(df.mean, aes(x=chr.coord, y=mean, group = cell.type, col=cell.type, fill=cell.type)) +
-            geom_line() +
-            geom_ribbon(aes(ymin=ci.lower, ymax=ci.higher), alpha=0.2, colour = NA) +
-            labs(y="Mean (PSI)", x=NULL) +
-            scale_y_continuous(labels=scales::number_format(accuracy=accuracy), limits=c(0, 1), position="right") +
-            scale_fill_manual(values=cell.types.colors) +
-            theme(panel.grid.major = element_blank(),
-                  panel.grid.minor = element_blank(),
-                  panel.background = element_blank(),
-                  panel.border=element_blank(),
-                  axis.line.y.right = element_line(color="black"),
-                  axis.title.y.right=element_text(size=11, angle=0, vjust=0.5, margin = margin(t = 0, r = 0, b = 0, l = 20)),
-                  axis.text=element_text(size=13),
-                  axis.text.x=element_blank(),
-                  axis.ticks.x=element_blank(),
-                  legend.position="none",
-                  plot.margin = margin(0.5, 0.38, 0, 0.7, "cm")
-                  )
+    if(show.mean.ci==TRUE){
+        
+        p2 <- ggplot(df.mean, aes(x=chr.coord, y=mean, group = cell.type, col=cell.type, fill=cell.type)) +
+                geom_line() +
+                geom_ribbon(aes(ymin=ci.lower, ymax=ci.higher), alpha=0.2, colour = NA) +
+                labs(y="Mean (PSI)", x=NULL) +
+                scale_y_continuous(labels=scales::number_format(accuracy=accuracy), limits=c(0, 1), position="right") +
+                scale_fill_manual(values=cell.types.colors) +
+                theme(panel.grid.major = element_blank(),
+                      panel.grid.minor = element_blank(),
+                      panel.background = element_blank(),
+                      panel.border=element_blank(),
+                      axis.line.y.right = element_line(color="black"),
+                      axis.title.y.right=element_text(size=11, angle=0, vjust=0.5, margin = margin(t = 0, r = 0, b = 0, l = 20)),
+                      axis.text=element_text(size=13),
+                      axis.text.x=element_blank(),
+                      axis.ticks.x=element_blank(),
+                      legend.position="none",
+                      plot.margin = margin(0.5, 0.38, 0, 0.7, "cm")
+                      )
+
+    } else {
+        
+        p2 <- ggplot(df.mean, aes(x=chr.coord, y=mean, group = cell.type, col=cell.type, fill=cell.type)) +
+                geom_line() +
+                #geom_ribbon(aes(ymin=ci.lower, ymax=ci.higher), alpha=0.2, colour = NA) +
+                labs(y="Mean (PSI)", x=NULL) +
+                scale_y_continuous(labels=scales::number_format(accuracy=accuracy), limits=c(0, 1), position="right") +
+                scale_fill_manual(values=cell.types.colors) +
+                theme(panel.grid.major = element_blank(),
+                      panel.grid.minor = element_blank(),
+                      panel.background = element_blank(),
+                      panel.border=element_blank(),
+                      axis.line.y.right = element_line(color="black"),
+                      axis.title.y.right=element_text(size=11, angle=0, vjust=0.5, margin = margin(t = 0, r = 0, b = 0, l = 20)),
+                      axis.text=element_text(size=13),
+                      axis.text.x=element_blank(),
+                      axis.ticks.x=element_blank(),
+                      legend.position="none",
+                      plot.margin = margin(0.5, 0.38, 0, 0.7, "cm")
+                      )
+        
+    }
+
+
     
     ##########################################################################
     ######################### LINE PLOT: P-VALUES ############################

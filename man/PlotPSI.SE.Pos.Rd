@@ -20,7 +20,8 @@ PlotPSI.SE.Pos(
   plot.height,
   plot.out,
   track = TRUE,
-  nboots = 2000
+  nboots = 2000,
+  show.mean.ci = TRUE
 )
 }
 \arguments{
@@ -55,6 +56,8 @@ PlotPSI.SE.Pos(
 \item{track}{Logical. If set to \code{TRUE} (default), a process of reading in the BAM files, which is the rate-limiting step, will be tracked on the console.}
 
 \item{nboots}{Numeric value. When \code{method} set to \code{"dts"}, the number of bootstrap iterations for computing the p-value.}
+
+\item{show.mean.ci}{Logical value. If set to \code{TRUE}, the 95percent confidence interval of the per-cell group mean PSI values will not be shown. Default is \code{FALSE}.}
 }
 \value{
 A plot in PDF format located in the folder specified by \code{plot.out} argument.
