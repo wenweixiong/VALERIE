@@ -773,7 +773,7 @@ PlotPSI.RI.Pos <- function(tran_id, Bam, BamPheno, cell.types, min.coverage, con
     # Plot
     p3 <- ggplot(data=df.pval, aes(x=chr.coord, y=p.val.adj.transformed, group=1)) +
             geom_line() +
-            geom_hline(yintercept=-log10(0.05), col="red", linetype="dashed") +
+            geom_hline(yintercept=-log10(sig.pval), col="red", linetype="dashed") +
             labs(x=NULL, y="-log10(p-value)") +
             scale_y_continuous(labels=scales::number_format(accuracy=accuracy),
                                limits=c(0, max(df.pval$p.val.adj.transformed)), position="right") +
